@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+      <meta name="description" content="Golang Chat Example">
+      <meta name="author" content="Zachary Collins">
+      <link rel="icon" href="http://getbootstrap.com/favicon.ico">
+      <title>Chat Example</title>
+      <!-- Bootstrap core CSS -->
+      <link href="./assets/bootstrap.min.css" rel="stylesheet">
+      <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+      <link href="./assets/ie10-viewport-bug-workaround.css" rel="stylesheet">
+      <!-- Custom styles for this template -->
+      <link href="./assets/starter-template.css" rel="stylesheet">
+      <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+      <script src="./assets/ie-emulation-modes-warning.js"></script>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+      <script type="text/javascript">
+
+      //Database query here?
+      $(function() {
+
+      var conn;
+
+      var msg = $("#msg");
+      var chat = $("#chat");
+
+      function appendChat(msg) {
+          var d = chat[0]
+          var doScroll = d.scrollTop == d.scrollHeight - d.clientHeight;
+          msg.appendTo(chat)
+          if (doScroll) {
+              d.scrollTop = d.scrollHeight - d.clientHeight;
+          }
+      }
+
+      //Nickname in submit from this connection.
+      $("#form").submit(function() {
+          if (!conn) {
+              return false;
+          }
+          if (!msg.val()) {
+              return false;
+          }
+          conn.send(msg.val());
+          //Resets to blank if sent
+          msg.val("");
+          return false
+      });
+
+      //create a websocket
+      if (window["WebSocket"]) {
+          var loc = window.location, new_uri;
+          if (loc.protocol === "https:") {
+              new_uri = "wss:";
+          } else {
+              new_uri = "ws:";
+          }
+          new_uri += "//{{$}}"+ "/ws" + loc.pathname;
+          conn = new WebSocket(new_uri);
+          conn.onclose = function(evt) {
+              appendChat($("<div><b>You have been disconnected due to inactivity.</b></div>"))
+          }
+          conn.onmessage = function(evt) {
+              appendChat($("<div/>").text(evt.data))
+          }
+      } else {
+          appendChat($("<div><b>A browser with websocket support is required.</b></div>"))
+      }
+      });
+  </script>
+  </head>
+  <body>
+    <!-- #Sidebar-wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <img src="https://goo.gl/GgLSrt" style="width:50px; height:50px" alt="prof picture"> </img>
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Chat Example
+                    </a>
+                </li>
+                <li>
+                    <a href="/0">Discussion 0</a>
+                </li>
+                <li>
+                    <a href="/1">Discussion 1</a>
+                </li>
+                <li>
+                    <a href="/2">Discussion 2</a>
+                </li>
+            </ul>
+        </div>
+        <!-- #Sidebar-wrapper -->
+
+        <!--#page content wrapper here -->
+
+    <div class="container" style="float:left; margin-top:15px;">
+      <div id="chat" class="container"></div>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+       <form id="form" style="float:left;">
+            <input type="submit" value="Submit" />
+            <input type="text" id="msg" size="128"/>   <!-- this is not responsive -->
+        </form>
+      </div>
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./assets/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="./assets/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="./assets/ie10-viewport-bug-workaround.js"></script>
+</body></html>
