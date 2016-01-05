@@ -10,6 +10,7 @@ import (
 var addr = flag.String("addr", ":8080", "http service address")
 var homeTempl = template.Must(template.ParseFiles("home.html"))
 
+
 func (h *hub)serveHome(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "GET" {
@@ -27,13 +28,12 @@ func main() {
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	flag.Parse()
 
-
 	//Add 3 hubs for testing
 	contr.addHub()
 	contr.addHub()
 	contr.addHub()
 
-	contr.run()
+  contr.run()
 
 	err := http.ListenAndServe(*addr, nil)
 	if err != nil {

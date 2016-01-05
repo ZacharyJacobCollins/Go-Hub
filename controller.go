@@ -9,7 +9,7 @@ type controller struct {
   hubs []*hub
 }
 
-//Global controller struct that is declared here.
+//Global controller struct.
 var contr = controller {
   hubs : make([]*hub, 0),
 }
