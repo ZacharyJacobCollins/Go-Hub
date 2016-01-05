@@ -8,7 +8,7 @@ import (
 )
 
 var addr = flag.String("addr", ":8080", "http service address")
-var homeTempl = template.Must(template.ParseFiles("home.html"))
+var homeTempl = template.Must(template.ParseFiles("/html/home.html"))
 
 
 func (h *hub)serveHome(w http.ResponseWriter, r *http.Request) {
