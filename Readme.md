@@ -1,4 +1,3 @@
-#NOTE- for now remember to navigate to /0 or number of applicable websocket  
 
 <h1>Hub</h1>
 
